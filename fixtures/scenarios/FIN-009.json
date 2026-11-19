@@ -1,0 +1,18 @@
+{
+  "description": "Goods price difference is 80 against a 10,000 line. The cap is the lower of 50 and 1 percent.",
+  "request": {
+    "case_id": "FIN-009",
+    "invoice_ref": "INV-9009",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "10080.00",
+    "currency": "AUD",
+    "invoice_date": "2026-11-01",
+    "po_number": "PO-9001",
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-REQ",
+    "receipter_id": "U-REC"
+  },
+  "case_id": "FIN-009"
+}

@@ -1,0 +1,479 @@
+{
+  "FIN-001": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-002": {
+    "records": [],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-003": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-004": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 3,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-005": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-006": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-007": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-008": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-009": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "10000.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1000.00",
+            "line_total": "10000.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-010": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "11000.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "11",
+            "unit_price": "1000.00",
+            "line_total": "11000.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-011": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-012": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12500.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1250.00",
+            "line_total": "12500.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-013": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "8000.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "8",
+            "unit_price": "1000.00",
+            "line_total": "8000.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "8",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-014": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "12540.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "1254.00",
+            "line_total": "12540.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-015": {
+    "records": [
+      {
+        "po_number": "PO-9001",
+        "vendor_id": "V-100",
+        "currency": "AUD",
+        "fx_permitted": false,
+        "freight_permitted": false,
+        "status": "APPROVED",
+        "total": "30000.00",
+        "lines": [
+          {
+            "line": 1,
+            "description": "Widgets",
+            "kind": "goods",
+            "qty": "10",
+            "unit_price": "3000.00",
+            "line_total": "30000.00"
+          }
+        ],
+        "receipts": [
+          {
+            "receipt_id": "GR-1",
+            "line": 1,
+            "qty": "10",
+            "received_on": "2026-11-02"
+          }
+        ],
+        "approver_id": "U-DIR-1"
+      }
+    ],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-016": {
+    "records": [],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  },
+  "FIN-017": {
+    "records": [],
+    "failures_remaining": 0,
+    "failure_code": "TIMEOUT"
+  }
+}

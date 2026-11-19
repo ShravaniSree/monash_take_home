@@ -1,0 +1,5 @@
+google-adk==2.14.1
+pydantic==2.14.3
+fastapi==0.164.0
+uvicorn==0.54.0
+pytest==8.4.2

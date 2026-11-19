@@ -1,0 +1,18 @@
+{
+  "description": "Verified bank change outside the two-business-day hold. A clean match still needs both the monetary approver and Financial Control.",
+  "request": {
+    "case_id": "FIN-012",
+    "invoice_ref": "INV-1012",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "12500.00",
+    "currency": "AUD",
+    "invoice_date": "2026-11-01",
+    "po_number": "PO-9001",
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-REQ",
+    "receipter_id": "U-REC"
+  },
+  "case_id": "FIN-012"
+}

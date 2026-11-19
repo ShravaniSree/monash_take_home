@@ -1,0 +1,679 @@
+openapi: 3.1.0
+info:
+  title: Northstar Accounts Payable Agent
+  summary: Process an invoice case, ground it in policy, and stop for approval before
+    posting.
+  description: Vendor, purchase-order, invoice-history, and rate mocks are loaded
+    by case_id from fixtures/tools. The policy index is the ingested finance corpus.
+    A recommendation of APPROVE_FOR_POSTING does not post until POST /runs/{run_id}/decision.
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      tags:
+      - meta
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+                title: Response Health Health Get
+  /runs:
+    post:
+      tags:
+      - runs
+      summary: Start a run
+      operationId: start_run_runs_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/ProcessingRequest'
+              - $ref: '#/components/schemas/ScenarioInput'
+              title: Body
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+  /runs/{run_id}:
+    get:
+      tags:
+      - runs
+      summary: Get a run
+      operationId: get_run_runs__run_id__get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResult'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /runs/{run_id}/decision:
+    post:
+      tags:
+      - runs
+      summary: Approve or reject a pending run
+      operationId: decide_run_runs__run_id__decision_post
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecision'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResult'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Not Found
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+          description: Unprocessable Entity
+  /evaluations:
+    post:
+      tags:
+      - evaluations
+      summary: Run the scenario fixtures and report pass or fail
+      operationId: evaluate_evaluations_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationReport'
+components:
+  schemas:
+    ActionTaken:
+      properties:
+        tool:
+          type: string
+          title: Tool
+        idempotency_key:
+          type: string
+          title: Idempotency Key
+        ledger_ref:
+          type: string
+          title: Ledger Ref
+        decision:
+          $ref: '#/components/schemas/LedgerDecision'
+      additionalProperties: false
+      type: object
+      required:
+      - tool
+      - idempotency_key
+      - ledger_ref
+      - decision
+      title: ActionTaken
+    ApprovalAction:
+      type: string
+      enum:
+      - APPROVED
+      - REJECTED
+      title: ApprovalAction
+    ApprovalDecision:
+      properties:
+        action:
+          $ref: '#/components/schemas/ApprovalAction'
+        approver_id:
+          type: string
+          title: Approver Id
+        role:
+          type: string
+          title: Role
+        comment:
+          type: string
+          title: Comment
+          default: ''
+      additionalProperties: false
+      type: object
+      required:
+      - action
+      - approver_id
+      - role
+      title: ApprovalDecision
+    ApprovalView:
+      properties:
+        approval_id:
+          type: string
+          title: Approval Id
+        required_roles:
+          items:
+            type: string
+          type: array
+          title: Required Roles
+        status:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          title: Status
+      additionalProperties: false
+      type: object
+      required:
+      - approval_id
+      - required_roles
+      - status
+      title: ApprovalView
+    Attachment:
+      properties:
+        name:
+          type: string
+          title: Name
+        text:
+          type: string
+          title: Text
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - text
+      title: Attachment
+    Calculation:
+      properties:
+        name:
+          type: string
+          title: Name
+        inputs:
+          additionalProperties: true
+          type: object
+          title: Inputs
+        formula:
+          type: string
+          title: Formula
+        result:
+          additionalProperties: true
+          type: object
+          title: Result
+        rounding:
+          type: string
+          title: Rounding
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - inputs
+      - formula
+      - result
+      - rounding
+      title: Calculation
+    CaseException:
+      properties:
+        category:
+          $ref: '#/components/schemas/ExceptionCategory'
+        failed_rule:
+          type: string
+          title: Failed Rule
+        expected:
+          type: string
+          title: Expected
+        observed:
+          type: string
+          title: Observed
+        chunk_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Chunk Id
+        owner:
+          type: string
+          title: Owner
+        next_review_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Next Review Date
+      additionalProperties: false
+      type: object
+      required:
+      - category
+      - failed_rule
+      - expected
+      - observed
+      - owner
+      title: CaseException
+    Confidence:
+      properties:
+        level:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+          title: Level
+        reasons:
+          items:
+            type: string
+          type: array
+          title: Reasons
+      additionalProperties: false
+      type: object
+      required:
+      - level
+      - reasons
+      title: Confidence
+    ErrorBody:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorBody
+    EvaluationCase:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        passed:
+          type: boolean
+          title: Passed
+        recommendation:
+          type: string
+          title: Recommendation
+        expected:
+          type: string
+          title: Expected
+      type: object
+      required:
+      - case_id
+      - passed
+      - recommendation
+      - expected
+      title: EvaluationCase
+    EvaluationReport:
+      properties:
+        passed:
+          type: integer
+          minimum: 0.0
+          title: Passed
+        failed:
+          type: integer
+          minimum: 0.0
+          title: Failed
+        cases:
+          items:
+            $ref: '#/components/schemas/EvaluationCase'
+          type: array
+          title: Cases
+      type: object
+      required:
+      - passed
+      - failed
+      - cases
+      title: EvaluationReport
+    ExceptionCategory:
+      type: string
+      enum:
+      - MISSING_PO
+      - MISSING_RECEIPT
+      - PRICE_VARIANCE
+      - QUANTITY_VARIANCE
+      - DUPLICATE_RISK
+      - VENDOR_BLOCK
+      - BANK_CHANGE
+      - AUTHORITY_GAP
+      - TAX_QUERY
+      - OTHER_CONTROL_RISK
+      title: ExceptionCategory
+    FactSource:
+      properties:
+        kind:
+          type: string
+          enum:
+          - tool
+          - chunk
+          title: Kind
+        tool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool
+        record_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Record Id
+        chunk_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Chunk Id
+        document_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Document Id
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+      additionalProperties: false
+      type: object
+      required:
+      - kind
+      title: FactSource
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    LedgerDecision:
+      type: string
+      enum:
+      - POST
+      - HOLD
+      - REJECT
+      title: LedgerDecision
+    NextAction:
+      type: string
+      enum:
+      - REQUEST_APPROVAL
+      - STOP_NO_PAYMENT
+      - ESCALATE
+      - RETRY_EVIDENCE
+      title: NextAction
+    PolicyFinding:
+      properties:
+        rule_id:
+          type: string
+          title: Rule Id
+        result:
+          type: string
+          enum:
+          - pass
+          - fail
+          - not_applicable
+          title: Result
+        chunk_id:
+          type: string
+          title: Chunk Id
+      additionalProperties: false
+      type: object
+      required:
+      - rule_id
+      - result
+      - chunk_id
+      title: PolicyFinding
+    ProcessingRequest:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        invoice_ref:
+          type: string
+          title: Invoice Ref
+        vendor_id:
+          type: string
+          title: Vendor Id
+        vendor_name:
+          type: string
+          title: Vendor Name
+        amount:
+          anyOf:
+          - type: number
+          - type: string
+          title: Amount
+        currency:
+          type: string
+          maxLength: 3
+          minLength: 3
+          title: Currency
+        invoice_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Invoice Date
+        po_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Po Number
+        notes:
+          type: string
+          title: Notes
+          default: ''
+        attachments:
+          items:
+            $ref: '#/components/schemas/Attachment'
+          type: array
+          title: Attachments
+        requester_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requester Id
+        receipter_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Receipter Id
+      additionalProperties: false
+      type: object
+      required:
+      - case_id
+      - invoice_ref
+      - vendor_id
+      - vendor_name
+      - amount
+      - currency
+      title: ProcessingRequest
+    Recommendation:
+      type: string
+      enum:
+      - APPROVE_FOR_POSTING
+      - HOLD_FOR_INFORMATION
+      - REJECT_DUPLICATE
+      - REJECT_INVALID
+      - ESCALATE_CONTROL_REVIEW
+      title: Recommendation
+    RunResult:
+      properties:
+        run_id:
+          type: string
+          title: Run Id
+        case_id:
+          type: string
+          title: Case Id
+        state:
+          $ref: '#/components/schemas/RunState'
+        recommendation:
+          $ref: '#/components/schemas/Recommendation'
+        reason:
+          type: string
+          title: Reason
+          description: Why the rules engine chose this recommendation.
+        sourced_facts:
+          items:
+            $ref: '#/components/schemas/SourcedFact'
+          type: array
+          title: Sourced Facts
+        calculations:
+          items:
+            $ref: '#/components/schemas/Calculation'
+          type: array
+          title: Calculations
+        inferences:
+          items:
+            type: string
+          type: array
+          title: Inferences
+        unknowns:
+          items:
+            type: string
+          type: array
+          title: Unknowns
+        policy_findings:
+          items:
+            $ref: '#/components/schemas/PolicyFinding'
+          type: array
+          title: Policy Findings
+        exceptions:
+          items:
+            $ref: '#/components/schemas/CaseException'
+          type: array
+          title: Exceptions
+        confidence:
+          $ref: '#/components/schemas/Confidence'
+        next_action:
+          $ref: '#/components/schemas/NextAction'
+        approval:
+          anyOf:
+          - $ref: '#/components/schemas/ApprovalView'
+          - type: 'null'
+        actions_taken:
+          items:
+            $ref: '#/components/schemas/ActionTaken'
+          type: array
+          title: Actions Taken
+      additionalProperties: false
+      type: object
+      required:
+      - run_id
+      - case_id
+      - state
+      - recommendation
+      - confidence
+      - next_action
+      title: RunResult
+    RunState:
+      type: string
+      enum:
+      - RECEIVED
+      - RETRIEVING
+      - GATHERING_EVIDENCE
+      - RECONCILING
+      - RECOMMENDING
+      - AWAITING_APPROVAL
+      - SUBMITTING
+      - COMPLETED
+      - FAILED
+      title: RunState
+    ScenarioInput:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        description:
+          type: string
+          title: Description
+          default: ''
+        request:
+          $ref: '#/components/schemas/ProcessingRequest'
+      type: object
+      required:
+      - case_id
+      - request
+      title: ScenarioInput
+      description: Same document as fixtures/scenarios/FIN-001.json. Tool mocks are
+        loaded by case_id.
+    SourcedFact:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          title: Value
+        source:
+          $ref: '#/components/schemas/FactSource'
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - value
+      - source
+      title: SourcedFact
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

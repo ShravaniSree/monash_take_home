@@ -1,0 +1,41 @@
+{
+  "FIN-001": [],
+  "FIN-002": [
+    {
+      "record_id": "HIST-88",
+      "vendor_id": "V-100",
+      "invoice_ref": "INV-2002",
+      "status": "PAID",
+      "currency": "AUD",
+      "gross_amount": "4000.00",
+      "invoice_date": "2026-10-28",
+      "po_number": null
+    }
+  ],
+  "FIN-003": [],
+  "FIN-004": [],
+  "FIN-005": [],
+  "FIN-006": [],
+  "FIN-007": [],
+  "FIN-008": [],
+  "FIN-009": [],
+  "FIN-010": [],
+  "FIN-011": [],
+  "FIN-012": [],
+  "FIN-013": [],
+  "FIN-014": [
+    {
+      "record_id": "HIST-14",
+      "vendor_id": "V-100",
+      "invoice_ref": "INV1001",
+      "status": "POSTED",
+      "currency": "AUD",
+      "gross_amount": "12500.00",
+      "invoice_date": "2026-10-28",
+      "po_number": "PO-9001"
+    }
+  ],
+  "FIN-015": [],
+  "FIN-016": [],
+  "FIN-017": []
+}

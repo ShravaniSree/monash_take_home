@@ -1,0 +1,18 @@
+{
+  "case_id": "FIN-002",
+  "description": "Invoice number and amount match an already-paid record.",
+  "request": {
+    "case_id": "FIN-002",
+    "invoice_ref": "INV-2002",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "4000.00",
+    "currency": "AUD",
+    "invoice_date": "2026-11-01",
+    "po_number": null,
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-REQ",
+    "receipter_id": "U-REC"
+  }
+}

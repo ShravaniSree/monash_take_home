@@ -1,0 +1,18 @@
+{
+  "case_id": "FIN-004",
+  "description": "Purchase-order tool times out three times, so the receipt is never retrieved.",
+  "request": {
+    "case_id": "FIN-004",
+    "invoice_ref": "INV-404",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "12500.00",
+    "currency": "AUD",
+    "invoice_date": "2026-11-01",
+    "po_number": "PO-9001",
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-REQ",
+    "receipter_id": "U-REC"
+  }
+}

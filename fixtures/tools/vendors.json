@@ -1,0 +1,291 @@
+{
+  "FIN-001": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-002": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-003": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-004": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-005": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-006": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-007": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-008": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "BLOCKED",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-009": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-010": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-011": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-012": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": "2026-10-01T00:00:00Z",
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-013": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-014": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-015": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-016": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ],
+  "FIN-017": [
+    {
+      "vendor_id": "V-100",
+      "legal_name": "Acme Supplies Pty Ltd",
+      "status": "ACTIVE",
+      "country": "AU",
+      "payment_country": "AU",
+      "account_last4": "4412",
+      "domains": [
+        "acme.example"
+      ],
+      "created_at": "2024-01-15T00:00:00Z",
+      "bank_change_verified_at": null,
+      "risk_flags": [],
+      "updated_at": "2026-10-01T00:00:00Z"
+    }
+  ]
+}

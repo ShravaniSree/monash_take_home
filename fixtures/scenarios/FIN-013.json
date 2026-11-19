@@ -1,0 +1,18 @@
+{
+  "description": "Invoice is USD and the purchase order is AUD. The order does not permit conversion.",
+  "request": {
+    "case_id": "FIN-013",
+    "invoice_ref": "INV-1013",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "8000.00",
+    "currency": "USD",
+    "invoice_date": "2026-11-01",
+    "po_number": "PO-9001",
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-REQ",
+    "receipter_id": "U-REC"
+  },
+  "case_id": "FIN-013"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Amount is above 25,000 and the requester is also the receipter.",
+  "request": {
+    "case_id": "FIN-015",
+    "invoice_ref": "INV-1015",
+    "vendor_id": "V-100",
+    "vendor_name": "Acme Supplies Pty Ltd",
+    "amount": "30000.00",
+    "currency": "AUD",
+    "invoice_date": "2026-11-01",
+    "po_number": "PO-9001",
+    "notes": "",
+    "attachments": [],
+    "requester_id": "U-SAME",
+    "receipter_id": "U-SAME"
+  },
+  "case_id": "FIN-015"
+}

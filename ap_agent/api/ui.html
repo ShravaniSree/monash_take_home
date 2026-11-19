@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AP agent tool trace</title>
+  <style>
+    :root { color-scheme: light; font-family: "Segoe UI", sans-serif; }
+    body { margin: 0; background: #f4f1ea; color: #1c1915; }
+    header, main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header { padding-bottom: 0; }
+    h1 { font-size: 1.4rem; margin: 0 0 8px; }
+    p { margin: 0; color: #5c564c; }
+    form, .run { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin: 20px 0; }
+    label { display: grid; gap: 4px; font-size: 0.85rem; }
+    select, input, button { font: inherit; padding: 8px 10px; }
+    button { background: #1c1915; color: #fff; border: 0; cursor: pointer; }
+    .summary { display: flex; gap: 16px; flex-wrap: wrap; background: #fff; padding: 16px; border: 1px solid #ddd6c8; }
+    .summary b { display: block; font-size: 0.75rem; color: #5c564c; font-weight: 600; }
+    .summary .wide { flex: 1 1 100%; }
+    article { background: #fff; border: 1px solid #ddd6c8; margin-top: 12px; }
+    article header { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #eee; }
+    .ok { color: #1b6b3a; }
+    .bad { color: #8d2a2a; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 16px; }
+    pre { margin: 0; white-space: pre-wrap; word-break: break-word; background: #f7f5f0; padding: 12px; font-size: 0.8rem; max-height: 360px; overflow: auto; }
+    h2 { font-size: 0.8rem; margin: 0 0 8px; }
+    .error { color: #8d2a2a; margin-top: 12px; }
+    @media (max-width: 800px) { .pair { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tool call trace</h1>
+    <p>Each row is one tool attempt. The request sent and the response received stay side by side.</p>
+  </header>
+  <main>
+    <form id="start-form">
+      <label>Scenario
+        <select id="scenario"></select>
+      </label>
+      <button type="submit">Start run</button>
+    </form>
+    <form id="load-form">
+      <label>Existing run
+        <input id="run-id" placeholder="run id">
+      </label>
+      <button type="submit">Load</button>
+    </form>
+    <p id="error" class="error" hidden></p>
+    <section id="trace" hidden>
+      <div class="summary" id="summary"></div>
+      <article id="initial-request" hidden>
+        <header><strong>Initial request</strong></header>
+        <div class="pair"><div><h2>Request JSON</h2><pre id="initial-request-body"></pre></div></div>
+      </article>
+      <form id="decision-form" hidden>
+        <label>Action
+          <select id="action">
+            <option>APPROVED</option>
+            <option>REJECTED</option>
+          </select>
+        </label>
+        <label>Approver id <input id="approver-id" value="U-DIR-1"></label>
+        <label>Role <input id="role" value="DEPARTMENT_DIRECTOR"></label>
+        <button type="submit">Send decision</button>
+      </form>
+      <div id="calls"></div>
+      <article id="llm-prompt" hidden>
+        <header><strong>LLM prompt</strong></header>
+        <div class="pair"><div><h2>Prompt sent to the model</h2><pre id="llm-prompt-body"></pre></div></div>
+      </article>
+      <article id="final-response" hidden>
+        <header><strong>Final response</strong></header>
+        <div class="pair"><div><h2>Response</h2><pre id="final-response-body"></pre></div></div>
+      </article>
+    </section>
+  </main>
+  <script>
+    const scenario = document.querySelector("#scenario");
+    const error = document.querySelector("#error");
+    const trace = document.querySelector("#trace");
+    const summary = document.querySelector("#summary");
+    const calls = document.querySelector("#calls");
+    const decisionForm = document.querySelector("#decision-form");
+    let currentRun = null;
+
+    function showError(message) {
+      error.hidden = !message;
+      error.textContent = message || "";
+    }
+
+    function pretty(value) {
+      return JSON.stringify(value, null, 2);
+    }
+
+    function render(run) {
+      currentRun = run;
+      trace.hidden = false;
+      document.querySelector("#run-id").value = run.run_id;
+      const fields = [
+        ["Run", run.run_id],
+        ["Case", run.case_id],
+        ["State", run.state],
+        ["Recommendation", run.recommendation],
+        ["Reason", run.reason || "", true],
+        ["Approval", run.approval ? run.approval.status + " / " + run.approval.required_roles.join(", ") : "none"],
+        ["Posted", run.actions_taken.length ? run.actions_taken.map(item => item.ledger_ref).join(", ") : "no"],
+      ];
+      summary.innerHTML = fields.map(([name, value, wide]) => `<div class="${wide ? "wide" : ""}"><b>${name}</b>${value}</div>`).join("");
+      const initialRequest = document.querySelector("#initial-request");
+      const initialBody = document.querySelector("#initial-request-body");
+      initialRequest.hidden = !run.request;
+      initialBody.textContent = run.request ? pretty(run.request) : "";
+      decisionForm.hidden = run.state !== "AWAITING_APPROVAL";
+      const promptCard = document.querySelector("#llm-prompt");
+      const promptBody = document.querySelector("#llm-prompt-body");
+      promptCard.hidden = !run.llm_prompt;
+      promptBody.textContent = run.llm_prompt ? pretty(run.llm_prompt) : "";
+      const responseCard = document.querySelector("#final-response");
+      const responseBody = document.querySelector("#final-response-body");
+      responseCard.hidden = !run.llm_response;
+      responseBody.textContent = run.llm_response || "";
+      calls.innerHTML = (run.tool_calls || []).map((call, index) => {
+        const status = call.error ? `<span class="bad">${call.error.code}</span>` : `<span class="ok">ok</span>`;
+        return `<article>
+          <header><strong>${index + 1}. ${call.tool}</strong><span>attempt ${call.attempt} ${status}</span></header>
+          <div class="pair">
+            <div><h2>Request</h2><pre>${pretty(call.request)}</pre></div>
+            <div><h2>${call.error ? "Error" : "Response"}</h2><pre>${pretty(call.error || call.response)}</pre></div>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    async function read(response) {
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.detail || response.statusText);
+      return body;
+    }
+
+    document.querySelector("#start-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showError("");
+      const file = await read(await fetch(`/scenarios/${scenario.value}`));
+      render(await read(await fetch("/runs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(file) })));
+    });
+
+    document.querySelector("#load-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showError("");
+      try {
+        render(await read(await fetch(`/runs/${document.querySelector("#run-id").value}`)));
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    decisionForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showError("");
+      const body = {
+        action: document.querySelector("#action").value,
+        approver_id: document.querySelector("#approver-id").value,
+        role: document.querySelector("#role").value,
+        comment: "Reviewed in the tool trace",
+      };
+      render(await read(await fetch(`/runs/${currentRun.run_id}/decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })));
+    });
+
+    fetch("/scenarios").then(read).then((items) => {
+      scenario.innerHTML = items.map((item) => `<option value="${item.case_id}">${item.case_id} — ${item.description}</option>`).join("");
+    }).catch((err) => showError(err.message));
+  </script>
+</body>
+</html>
