@@ -27,6 +27,8 @@ from ap_agent.domain.models import (
     VendorRecord,
     VendorStatus,
 )
+from ap_agent.utils.logging import get_logger
+from ap_agent.utils.logging import log_event
 
 _Q2 = Decimal("0.01")
 _LIMITS: list[tuple[str, Decimal | None]] = [
@@ -277,8 +279,10 @@ def _finding(result: EngineResult, rule_id: str, outcome: str, chunk_id: str | N
     """
     if chunk_id is None:
         result.unknowns.append(f"{rule_id} has no current citation")
+        log_event(get_logger(__name__), "control_check", rule_id=rule_id, outcome="uncited")
         return
     result.findings.append(PolicyFinding(rule_id=rule_id, result=outcome, chunk_id=chunk_id))  # type: ignore[arg-type]
+    log_event(get_logger(__name__), "control_check", rule_id=rule_id, outcome=outcome, chunk_id=chunk_id)
 
 
 def reconcile(
@@ -782,3 +786,11 @@ def _finish(result: EngineResult, *, missing_tools: bool) -> None:
         result.confidence = Confidence(level="low", reasons=["a required tool was unavailable"])
     else:
         result.confidence = Confidence(level="medium", reasons=["a control failed closed"])
+    log_event(
+        get_logger(__name__),
+        "decision_made",
+        recommendation=result.recommendation.value,
+        amount_aud=str(result.amount_aud),
+        reason=result.reason,
+        confidence=result.confidence.level,
+    )

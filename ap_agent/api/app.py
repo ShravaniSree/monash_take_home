@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
+from uuid import uuid4
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.responses import HTMLResponse
@@ -21,6 +23,9 @@ from ap_agent.domain.models import Recommendation
 from ap_agent.domain.models import RunResult
 from ap_agent.domain.models import RunState
 from ap_agent.utils.env import load_local_env
+from ap_agent.utils.logging import get_logger
+from ap_agent.utils.logging import log_event
+from ap_agent.utils.logging import request_id
 from ap_agent.utils.paths import scenarios_dir
 from ap_agent.systems.fixtures import load_scenario
 from ap_agent.systems.fixtures import request_from_payload
@@ -162,6 +167,30 @@ def create_app(root: Path | None = None) -> FastAPI:
         ),
         lifespan=lifespan,
     )
+
+    @app.middleware("http")
+    async def log_http(request, call_next):
+        """Attach a request id and log the status and duration."""
+        incoming = request.headers.get("x-request-id") or str(uuid4())
+        token = request_id.set(incoming)
+        started = time.perf_counter()
+        status_code = 500
+        try:
+            response = await call_next(request)
+            status_code = response.status_code
+            response.headers["X-Request-ID"] = incoming
+            return response
+        finally:
+            log_event(
+                get_logger(__name__),
+                "http_request",
+                request_id=incoming,
+                method=request.method,
+                path=request.url.path,
+                status_code=status_code,
+                duration_ms=int((time.perf_counter() - started) * 1000),
+            )
+            request_id.reset(token)
 
     @app.get("/", include_in_schema=False)
     def tool_trace_page() -> HTMLResponse:

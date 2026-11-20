@@ -27,6 +27,23 @@
 | Sessions | ADK stores the waiting run in `data/adk_sessions.sqlite`. |
 | Ledger | Approved posts and audit events go to `data/ap_agent.sqlite`. |
 
+## CI
+
+- GitHub Actions runs the tests on every push and pull request.
+- The workflow is [`.github/workflows/test.yml`](.github/workflows/test.yml).
+- It uses Python 3.12, installs `requirements.txt`, and runs `pytest` with a coverage report.
+- `LLM_PROVIDER` is `fake`, so the run does not call Gemini.
+
+## Logging
+
+- Each event is one JSON line: timestamp, level, logger name, and the event payload.
+- A control check logs `control_check` with the rule id and pass, fail, or uncited.
+- A finished recommendation logs `decision_made` with the recommendation, AUD amount, and reason.
+- Each tool attempt logs `tool_call` with the tool name, duration, and error code. The request body is not logged.
+- Each agent logs `agent_started` with the run id.
+- Each HTTP call logs `http_request` and returns the same id in `X-Request-ID`. Send that header to tie the logs to one call.
+- `LOG_LEVEL` in `.env` sets the level. The default is `INFO`.
+
 ## RAG
 
 - Policy search is lexical. There is no vector index.
@@ -56,6 +73,14 @@
 - `doc_type` is `policy`, `adversarial`, or `irrelevant`, taken from `status` and `tags`.
 
 ## Local setup
+
+**Option 1**
+
+- If you prefer docker, please use:
+  ```powershell
+  docker build -t ap-agent .
+  docker run --rm -p 8000:8000 ap-agent
+  ```
 
 - Python 3.12 or newer is required.
 - The packages are listed in [requirements.txt](requirements.txt): Google ADK, Pydantic, FastAPI, Uvicorn, and pytest.
@@ -90,10 +115,14 @@ python -m ap_agent.cli serve
 
 ## Model
 
+**Option 1**
+
+- Use fake calls to LLM by using the setup without setting `LLM_PROVIDER`
 - The narrative agent is the only agent that can call a model.
-- It uses the local template when `LLM_PROVIDER` is `fake` or unset.
 - That is the default in [.env.example](.env.example), and it is also what runs when there is no `.env`.
 - The template repeats the recommendation the rules engine already stored. It does not call Gemini.
+
+**Option 2**
 - To use Gemini, copy [.env.example](.env.example) to `.env` in the project root and set:
 
 ```
@@ -143,14 +172,18 @@ With the server running, the generated docs are:
 - Policy text is the markdown corpus, not one of these JSON files.
 - Scenario descriptions are in [TEST_HELPER.md](TEST_HELPER.md).
 
-## Limitations
 
-- `submit_finance_decision` writes a simulated ledger row.
-- It does not update the vendor, purchase-order, or invoice-history JSON, and it does not write to a bank or an ERP.
-- Starting the same invoice again builds a fresh world from those files, so a case that was just approved still recommends approval.
-- Duplicate detection only sees the history that was stored for that case id, such as `FIN-002`.
-- A repeated approval of the same run returns the original ledger row.
-- That replay is inside the run. It is not a second invoice.
-- Retrieval is lexical FTS5, not a vector index.
-- The default model is a template and does not call Gemini.
-- A hold marked `RETRY_EVIDENCE` does not call the failed tool again by itself.
+
+## Timelines
+
+- Took around ~5hrs to implement.
+- Used a combination of cursor and chatgpt to generate TDD, iterate on it and implement it.
+- Code written by cursor and then modified/improved by me to make it production ready. 
+- Hillclimbing done to improve the initial RAG implementation and retrieval in multiple rounds.
+
+## Future Improvements
+
+- Implement apipeline for automatic ingestion of new policy documents on a daily basis.
+- Improve the current Retrieval mechanism to use Vector based search.
+- Implement authentication and authorization and fetch the role using authroization result rather than user entering it.
+- Caching of commong result from Retrieval. 

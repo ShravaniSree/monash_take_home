@@ -28,6 +28,8 @@ from ap_agent.domain.models import ToolError
 from ap_agent.domain.models import ToolErrorCode
 from ap_agent.domain.models import Trust
 from ap_agent.domain.models import VendorRecord
+from ap_agent.utils.logging import get_logger
+from ap_agent.utils.logging import log_event
 from ap_agent.domain.redact import redact_data
 from ap_agent.retrieval.index import PolicyIndex
 from ap_agent.systems.world import FinanceWorld
@@ -125,12 +127,14 @@ def call_tool(
                 calls,
                 ToolCallRecord(tool=tool, attempt=attempt, request=stored_request, error=error, ts=_now(), duration_ms=0),
             )
+            _log_tool(tool, attempt, 0, error.code.value)
             return None, attempt, error
         started = time.perf_counter()
         try:
             value = _run_with_timeout(func, timeout_s)
         except ToolFault as exc:
             error = ToolError(code=exc.code, message=exc.message)
+            duration_ms = _elapsed(started)
             _record(
                 calls,
                 ToolCallRecord(
@@ -139,15 +143,17 @@ def call_tool(
                     request=stored_request,
                     error=error,
                     ts=_now(),
-                    duration_ms=_elapsed(started),
+                    duration_ms=duration_ms,
                 ),
             )
+            _log_tool(tool, attempt, duration_ms, exc.code.value)
             if exc.code not in _RETRYABLE or attempt == _MAX_ATTEMPTS:
                 return None, attempt, error
             continue
         response = _jsonable(value)
         if tool != "retrieve_finance_documents":
             response = redact_data(response)
+        duration_ms = _elapsed(started)
         _record(
             calls,
             ToolCallRecord(
@@ -156,12 +162,33 @@ def call_tool(
                 request=stored_request,
                 response=response,
                 ts=_now(),
-                duration_ms=_elapsed(started),
+                duration_ms=duration_ms,
             ),
         )
+        _log_tool(tool, attempt, duration_ms, None)
         return value, attempt, None
     error = ToolError(code=ToolErrorCode.TRANSIENT, message="tool failed")
     return None, _MAX_ATTEMPTS, error
+
+
+def _log_tool(tool: str, attempt: int, duration_ms: int, error: str | None) -> None:
+    """Record one tool attempt without the request body.
+
+    Args:
+        tool: Tool name.
+        attempt: Attempt number, starting at 1.
+        duration_ms: Wall-clock time for this attempt.
+        error: Error code, or ``None`` when the attempt succeeded.
+    """
+    log_event(
+        get_logger(__name__),
+        "tool_call",
+        tool=tool,
+        attempt=attempt,
+        duration_ms=duration_ms,
+        success=error is None,
+        error_code=error,
+    )
 
 
 def _now() -> str:

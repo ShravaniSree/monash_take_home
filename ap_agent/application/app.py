@@ -48,6 +48,8 @@ from ap_agent.systems.store import AuditStore
 from ap_agent.systems.world import FinanceWorld
 from ap_agent.systems.world import ToolFault
 from ap_agent.systems.world import idempotency_key
+from ap_agent.utils.logging import get_logger
+from ap_agent.utils.logging import log_event
 
 APP_NAME = "ap_agent"
 USER_ID = "operator"
@@ -119,6 +121,7 @@ class EvidenceAgent(BaseAgent):
         Yields:
             One state event containing the evidence payload.
         """
+        log_event(get_logger(__name__), "agent_started", agent=self.name, run_id=ctx.session.id, phase=ctx.session.state.get("phase"))
         if ctx.session.state.get("phase") == "AWAITING_APPROVAL":
             yield Event(author=self.name)
             return
@@ -156,6 +159,7 @@ class ReconcileAgent(BaseAgent):
         Yields:
             One state event containing the run snapshot.
         """
+        log_event(get_logger(__name__), "agent_started", agent=self.name, run_id=ctx.session.id, phase=ctx.session.state.get("phase"))
         if ctx.session.state.get("phase") == "AWAITING_APPROVAL":
             yield Event(author=self.name)
             return
@@ -176,6 +180,14 @@ class ReconcileAgent(BaseAgent):
             engine.reason = "invoice history was unavailable"
         events = list(ctx.session.state.get("events") or [])
         events.append(_event(ctx.session.id, "recommendation.ready", engine.recommendation.value))
+        log_event(
+            get_logger(__name__),
+            "decision_made",
+            run_id=ctx.session.id,
+            recommendation=engine.recommendation.value,
+            amount_aud=str(engine.amount_aud),
+            reason=engine.reason,
+        )
         result = to_run_result(ctx.session.id, request, engine, evidence.get("tool_calls") or [], events)
         phase = "AWAITING_APPROVAL" if result.state is RunState.AWAITING_APPROVAL else "RECOMMENDED"
         snapshot = {
@@ -359,6 +371,13 @@ def narrative_callback(callback_context: Any, llm_request: Any = None) -> LlmRes
         A model response, or ``None`` when a real model should be called.
     """
     state = callback_context.state
+    log_event(
+        get_logger(__name__),
+        "agent_started",
+        agent="narrative_agent",
+        run_id=str((state.get("result") or {}).get("run_id") or ""),
+        phase="narrative",
+    )
     if provider() != "fake" and not state.get("model_script"):
         _attach_snapshot(llm_request, state)
         state["llm_prompt"] = prompt_view(llm_request)
@@ -418,6 +437,7 @@ class GateAgent(BaseAgent):
         Yields:
             One state event with the updated snapshot.
         """
+        log_event(get_logger(__name__), "agent_started", agent=self.name, run_id=ctx.session.id, phase=ctx.session.state.get("phase"))
         result = RunResult.model_validate(ctx.session.state["result"])
         events = list(ctx.session.state.get("events") or [item.model_dump(mode="json") for item in result.events])
         if result.recommendation is not Recommendation.APPROVE_FOR_POSTING:
