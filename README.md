@@ -74,7 +74,7 @@
 
 ## Local setup
 
-**Option 1**
+***Option 1***
 
 - If you prefer docker, please use:
   ```powershell
@@ -82,6 +82,8 @@
   docker run --rm -p 8000:8000 ap-agent
   ```
 
+***Option 2***
+- To run the service locally,
 - Python 3.12 or newer is required.
 - The packages are listed in [requirements.txt](requirements.txt): Google ADK, Pydantic, FastAPI, Uvicorn, and pytest.
 - From the project root, create the environment, activate it, then install and start the server.
@@ -115,14 +117,14 @@ python -m ap_agent.cli serve
 
 ## Model
 
-**Option 1**
+***Option 1***
 
 - Use fake calls to LLM by using the setup without setting `LLM_PROVIDER`
 - The narrative agent is the only agent that can call a model.
 - That is the default in [.env.example](.env.example), and it is also what runs when there is no `.env`.
 - The template repeats the recommendation the rules engine already stored. It does not call Gemini.
 
-**Option 2**
+***Option 2***
 - To use Gemini, copy [.env.example](.env.example) to `.env` in the project root and set:
 
 ```
